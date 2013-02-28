@@ -28,6 +28,7 @@ from sickbeard import logger
 from sickbeard import common
 from sickbeard.exceptions import ex
 from sickbeard.encodingKludge import fixStupidEncodings
+from sickbeard import version
 
 try:
     import xml.etree.cElementTree as etree
@@ -42,9 +43,15 @@ except ImportError:
 
 class XBMCNotifier:
 
+<<<<<<< HEAD
     sb_logo_url = 'http://www.sickbeard.com/xbmc-notify.png'
 
     def _get_xbmc_version(self, host, username, password):
+=======
+    sickbeard_logo_url = 'https://raw.github.com/mr-orange/Sick-Beard/%s/gui/slick/images/xbmc-notify.png' % (version.SICKBEARD_VERSION)
+
+    def _get_json_version(self, host, username, password):
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
         """Returns XBMC JSON-RPC API version (odd # = dev, even # = stable)
 
         Sends a request to the XBMC host using the JSON-RPC to determine if
@@ -139,7 +146,11 @@ class XBMCNotifier:
                         result += curHost + ':' + str(notifyResult)
                 else:
                     logger.log(u"Detected XBMC version >= 12, using XBMC JSON API", logger.DEBUG)
+<<<<<<< HEAD
                     command = '{"jsonrpc":"2.0","method":"GUI.ShowNotification","params":{"title":"%s","message":"%s", "image": "%s"},"id":1}' % (title.encode("utf-8"), message.encode("utf-8"), self.sb_logo_url)
+=======
+                    command = '{"jsonrpc":"2.0","method":"GUI.ShowNotification","params":{"title":"%s","message":"%s","image":"%s"},"id":1}' % (title.encode("utf-8"), message.encode("utf-8"), self.sickbeard_logo_url.encode("utf-8"))
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
                     notifyResult = self._send_to_xbmc_json(command, curHost, username, password)
                     if notifyResult:
                         result += curHost + ':' + notifyResult["result"].decode(sickbeard.SYS_ENCODING)
@@ -449,6 +460,10 @@ class XBMCNotifier:
     def notify_download(self, ep_name):
         if sickbeard.XBMC_NOTIFY_ONDOWNLOAD:
             self._notify_xbmc(ep_name, common.notifyStrings[common.NOTIFY_DOWNLOAD])
+
+    def notify_subtitle_download(self, ep_name, lang):
+        if sickbeard.XBMC_NOTIFY_ONSUBTITLEDOWNLOAD:
+            self._notify_xbmc(ep_name + ": " + lang, common.notifyStrings[common.NOTIFY_SUBTITLE_DOWNLOAD])
 
     def test_notify(self, host, username, password):
         return self._notify_xbmc("Testing XBMC notifications from Sick Beard", "Test Notification", host, username, password, force=True)

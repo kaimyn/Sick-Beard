@@ -33,7 +33,7 @@ import sickbeard
 
 from sickbeard.exceptions import MultipleShowObjectsException, ex
 from sickbeard import logger, classes
-from sickbeard.common import USER_AGENT, mediaExtensions, XML_NSMAP
+from sickbeard.common import USER_AGENT, mediaExtensions, subtitleExtensions, XML_NSMAP
 
 from sickbeard import db
 from sickbeard import encodingKludge as ek
@@ -42,6 +42,9 @@ from sickbeard import notifiers
 from lib.tvdb_api import tvdb_api, tvdb_exceptions
 
 import xml.etree.cElementTree as etree
+
+from lib import subliminal
+#from sickbeard.subtitles import EXTENSIONS
 
 urllib._urlopener = classes.SickBeardURLopener()
 
@@ -487,6 +490,17 @@ def rename_ep_file(cur_path, new_path):
     new_dest_dir, new_dest_name = os.path.split(new_path) #@UnusedVariable
     cur_file_name, cur_file_ext = os.path.splitext(cur_path) #@UnusedVariable
 
+    if cur_file_ext[1:] in subtitleExtensions:
+        #Extract subtitle language from filename
+        sublang = os.path.splitext(cur_file_name)[1][1:]
+        
+        #Check if the language extracted from filename is a valid language
+        try:
+            language = subliminal.language.Language(sublang, strict=True)
+            cur_file_ext = '.'+sublang+cur_file_ext 
+        except ValueError:
+            pass
+        
     # put the extension on the incoming file
     new_path += cur_file_ext
 
@@ -538,7 +552,6 @@ def delete_empty_folders(check_empty_dir, keep_dir=None):
             check_empty_dir = ek.ek(os.path.dirname, check_empty_dir)
         else:
             break
-
 
 def chmodAsParent(childPath):
     if os.name == 'nt' or os.name == 'ce':
@@ -705,3 +718,21 @@ def backupVersionedFile(oldFile, version):
         if numTries >= 10:
             logger.log(u"Unable to back up "+oldFile+", please do it manually.")
             sys.exit(1)
+            
+def debug():
+
+    pass
+
+#    REMOTE_DBG = True
+#    
+#    if REMOTE_DBG:
+#            # Make pydev debugger works for auto reload.
+#            # Note pydevd module need to be copied in XBMC\system\python\Lib\pysrc
+#        try:
+#            import pysrc.pydevd as pydevd
+#            # stdoutToServer and stderrToServer redirect stdout and stderr to eclipse console
+#            pydevd.settrace('localhost', port=5678, stdoutToServer=True, stderrToServer=True)
+#        except ImportError:
+#            sys.stderr.write("Error: " +
+#                    "You must add org.python.pydev.debug.pysrc to your PYTHONPATH.")
+#            sys.exit(1)                 
