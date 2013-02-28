@@ -31,7 +31,11 @@ from threading import Lock
 # apparently py2exe won't build these unless they're imported somewhere
 from sickbeard import providers, metadata
 <<<<<<< HEAD
+<<<<<<< HEAD
 from providers import ezrss, tvtorrents, btn, nzbsrus, newznab, womble
+=======
+from providers import ezrss, tvtorrents, torrentleech, btn, nzbsrus, newznab, womble, nzbx, omgwtfnzbs
+>>>>>>> origin/development
 =======
 from providers import ezrss, tvtorrents, btn, nzbsrus, newznab, womble, thepiratebay, dtt, torrentleech, nzbx, iptorrents
 >>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
@@ -172,6 +176,9 @@ TVTORRENTS = False
 TVTORRENTS_DIGEST = None
 TVTORRENTS_HASH = None
 
+TORRENTLEECH = False
+TORRENTLEECH_KEY = None
+
 BTN = False
 BTN_API_KEY = None
 
@@ -208,6 +215,13 @@ NZBS_UID = None
 NZBS_HASH = None
 
 WOMBLE = False
+
+NZBX = False
+NZBX_COMPLETION = 100
+
+OMGWTFNZBS = False
+OMGWTFNZBS_UID = None
+OMGWTFNZBS_KEY = None
 
 NZBSRUS = False
 NZBSRUS_UID = None
@@ -248,6 +262,7 @@ XBMC_NOTIFY_ONDOWNLOAD = False
 XBMC_NOTIFY_ONSUBTITLEDOWNLOAD = False
 XBMC_UPDATE_LIBRARY = False
 XBMC_UPDATE_FULL = False
+XBMC_UPDATE_ONLYFIRST = False
 XBMC_HOST = ''
 XBMC_USERNAME = None
 XBMC_PASSWORD = None
@@ -318,10 +333,17 @@ NMJ_MOUNT = None
 
 USE_SYNOINDEX = False
 
+<<<<<<< HEAD
+USE_NMJv2 = False
+NMJv2_HOST = None
+NMJv2_DATABASE = None
+NMJv2_DBLOC = None
+=======
 USE_SYNOLOGYNOTIFIER = False
 SYNOLOGYNOTIFIER_NOTIFY_ONSNATCH = False
 SYNOLOGYNOTIFIER_NOTIFY_ONDOWNLOAD = False
 SYNOLOGYNOTIFIER_NOTIFY_ONSUBTITLEDOWNLOAD = False
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
 
 USE_TRAKT = False
 TRAKT_USERNAME = None
@@ -382,12 +404,27 @@ def initialize(consoleLogging=True):
                 USE_NZBS, USE_TORRENTS, NZB_METHOD, NZB_DIR, DOWNLOAD_PROPERS, TORRENT_METHOD, \
                 SAB_USERNAME, SAB_PASSWORD, SAB_APIKEY, SAB_CATEGORY, SAB_HOST, \
                 NZBGET_PASSWORD, NZBGET_CATEGORY, NZBGET_HOST, currentSearchScheduler, backlogSearchScheduler, \
+<<<<<<< HEAD
+                USE_XBMC, XBMC_NOTIFY_ONSNATCH, XBMC_NOTIFY_ONDOWNLOAD, XBMC_UPDATE_FULL, XBMC_UPDATE_ONLYFIRST, \
+=======
                 TORRENT_USERNAME, TORRENT_PASSWORD, TORRENT_HOST, TORRENT_PATH, TORRENT_RATIO, TORRENT_PAUSED, TORRENT_LABEL, \
                 USE_XBMC, XBMC_NOTIFY_ONSNATCH, XBMC_NOTIFY_ONDOWNLOAD, XBMC_NOTIFY_ONSUBTITLEDOWNLOAD, XBMC_UPDATE_FULL, \
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
                 XBMC_UPDATE_LIBRARY, XBMC_HOST, XBMC_USERNAME, XBMC_PASSWORD, \
                 USE_TRAKT, TRAKT_USERNAME, TRAKT_PASSWORD, TRAKT_API, TRAKT_REMOVE_WATCHLIST, TRAKT_USE_WATCHLIST, TRAKT_METHOD_ADD, TRAKT_START_PAUSED, traktWatchListCheckerSchedular, \
                 USE_PLEX, PLEX_NOTIFY_ONSNATCH, PLEX_NOTIFY_ONDOWNLOAD, PLEX_NOTIFY_ONSUBTITLEDOWNLOAD, PLEX_UPDATE_LIBRARY, \
                 PLEX_SERVER_HOST, PLEX_HOST, PLEX_USERNAME, PLEX_PASSWORD, \
+<<<<<<< HEAD
+                showUpdateScheduler, __INITIALIZED__, LAUNCH_BROWSER, showList, loadingShowList, \
+                NZBS, NZBS_UID, NZBS_HASH, EZRSS, TVTORRENTS, TVTORRENTS_DIGEST, TVTORRENTS_HASH, BTN, BTN_API_KEY, TORRENTLEECH, TORRENTLEECH_KEY, \
+                TORRENT_DIR, USENET_RETENTION, SOCKET_TIMEOUT, \
+                SEARCH_FREQUENCY, DEFAULT_SEARCH_FREQUENCY, BACKLOG_SEARCH_FREQUENCY, \
+                QUALITY_DEFAULT, FLATTEN_FOLDERS_DEFAULT, STATUS_DEFAULT, \
+                GROWL_NOTIFY_ONSNATCH, GROWL_NOTIFY_ONDOWNLOAD, TWITTER_NOTIFY_ONSNATCH, TWITTER_NOTIFY_ONDOWNLOAD, \
+                USE_GROWL, GROWL_HOST, GROWL_PASSWORD, USE_PROWL, PROWL_NOTIFY_ONSNATCH, PROWL_NOTIFY_ONDOWNLOAD, PROWL_API, PROWL_PRIORITY, PROG_DIR, NZBMATRIX, NZBMATRIX_USERNAME, \
+                USE_PYTIVO, PYTIVO_NOTIFY_ONSNATCH, PYTIVO_NOTIFY_ONDOWNLOAD, PYTIVO_UPDATE_LIBRARY, PYTIVO_HOST, PYTIVO_SHARE_NAME, PYTIVO_TIVO_NAME, \
+                USE_NMA, NMA_NOTIFY_ONSNATCH, NMA_NOTIFY_ONDOWNLOAD, NMA_API, NMA_PRIORITY, \
+=======
                 showUpdateScheduler, __INITIALIZED__, LAUNCH_BROWSER, UPDATE_SHOWS_ON_START, showList, loadingShowList, \
                 NZBS, NZBS_UID, NZBS_HASH, EZRSS, TVTORRENTS, TVTORRENTS_DIGEST, TVTORRENTS_HASH, BTN, BTN_API_KEY, \
                 DTT, DTT_NORAR, DTT_SINGLE, THEPIRATEBAY, THEPIRATEBAY_TRUSTED, THEPIRATEBAY_PROXY, THEPIRATEBAY_PROXY_URL, THEPIRATEBAY_BLACKLIST, TORRENTLEECH, TORRENTLEECH_USERNAME, TORRENTLEECH_PASSWORD, \
@@ -397,11 +434,21 @@ def initialize(consoleLogging=True):
                 USE_GROWL, GROWL_HOST, GROWL_PASSWORD, USE_PROWL, PROWL_NOTIFY_ONSNATCH, PROWL_NOTIFY_ONDOWNLOAD, PROWL_NOTIFY_ONSUBTITLEDOWNLOAD, PROWL_API, PROWL_PRIORITY, PROG_DIR, NZBMATRIX, NZBMATRIX_USERNAME, \
                 USE_PYTIVO, PYTIVO_NOTIFY_ONSNATCH, PYTIVO_NOTIFY_ONDOWNLOAD, PYTIVO_NOTIFY_ONSUBTITLEDOWNLOAD, PYTIVO_UPDATE_LIBRARY, PYTIVO_HOST, PYTIVO_SHARE_NAME, PYTIVO_TIVO_NAME, \
                 USE_NMA, NMA_NOTIFY_ONSNATCH, NMA_NOTIFY_ONDOWNLOAD, NMA_NOTIFY_ONSUBTITLEDOWNLOAD, NMA_API, NMA_PRIORITY, \
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
                 NZBMATRIX_APIKEY, versionCheckScheduler, VERSION_NOTIFY, PROCESS_AUTOMATICALLY, \
                 KEEP_PROCESSED_DIR, TV_DOWNLOAD_DIR, TVDB_BASE_URL, MIN_SEARCH_FREQUENCY, \
                 showQueueScheduler, searchQueueScheduler, ROOT_DIRS, CACHE_DIR, ACTUAL_CACHE_DIR, TVDB_API_PARMS, \
                 NAMING_PATTERN, NAMING_MULTI_EP, NAMING_FORCE_FOLDERS, NAMING_ABD_PATTERN, NAMING_CUSTOM_ABD, NAMING_STRIP_YEAR, \
                 RENAME_EPISODES, properFinderScheduler, PROVIDER_ORDER, autoPostProcesserScheduler, \
+<<<<<<< HEAD
+                NZBSRUS, NZBSRUS_UID, NZBSRUS_HASH, WOMBLE, NZBX, NZBX_COMPLETION, OMGWTFNZBS, OMGWTFNZBS_UID, OMGWTFNZBS_KEY, providerList, newznabProviderList, \
+                EXTRA_SCRIPTS, USE_TWITTER, TWITTER_USERNAME, TWITTER_PASSWORD, TWITTER_PREFIX, \
+                USE_NOTIFO, NOTIFO_USERNAME, NOTIFO_APISECRET, NOTIFO_NOTIFY_ONDOWNLOAD, NOTIFO_NOTIFY_ONSNATCH, \
+                USE_BOXCAR, BOXCAR_USERNAME, BOXCAR_PASSWORD, BOXCAR_NOTIFY_ONDOWNLOAD, BOXCAR_NOTIFY_ONSNATCH, \
+                USE_PUSHOVER, PUSHOVER_USERKEY, PUSHOVER_NOTIFY_ONDOWNLOAD, PUSHOVER_NOTIFY_ONSNATCH, \
+                USE_LIBNOTIFY, LIBNOTIFY_NOTIFY_ONSNATCH, LIBNOTIFY_NOTIFY_ONDOWNLOAD, USE_NMJ, NMJ_HOST, NMJ_DATABASE, NMJ_MOUNT, USE_NMJv2, NMJv2_HOST, NMJv2_DATABASE, NMJv2_DBLOC, USE_SYNOINDEX, \
+                USE_BANNER, USE_LISTVIEW, METADATA_XBMC, METADATA_MEDIABROWSER, METADATA_PS3, METADATA_SYNOLOGY, metadata_provider_dict, \
+=======
                 NZBSRUS, NZBSRUS_UID, NZBSRUS_HASH, WOMBLE, NZBX, NZBX_COMPLETION, providerList, newznabProviderList, \
                 EXTRA_SCRIPTS, USE_TWITTER, TWITTER_USERNAME, TWITTER_PASSWORD, TWITTER_PREFIX, \
                 USE_NOTIFO, NOTIFO_USERNAME, NOTIFO_APISECRET, NOTIFO_NOTIFY_ONDOWNLOAD, NOTIFO_NOTIFY_ONSUBTITLEDOWNLOAD, NOTIFO_NOTIFY_ONSNATCH, \
@@ -410,6 +457,7 @@ def initialize(consoleLogging=True):
                 USE_LIBNOTIFY, LIBNOTIFY_NOTIFY_ONSNATCH, LIBNOTIFY_NOTIFY_ONDOWNLOAD, LIBNOTIFY_NOTIFY_ONSUBTITLEDOWNLOAD, USE_NMJ, NMJ_HOST, NMJ_DATABASE, NMJ_MOUNT, USE_SYNOINDEX, \
                 USE_SYNOLOGYNOTIFIER, SYNOLOGYNOTIFIER_NOTIFY_ONSNATCH, SYNOLOGYNOTIFIER_NOTIFY_ONDOWNLOAD, SYNOLOGYNOTIFIER_NOTIFY_ONSUBTITLEDOWNLOAD, \
                 USE_BANNER, USE_LISTVIEW, METADATA_XBMC, METADATA_MEDIABROWSER, METADATA_PS3, METADATA_SYNOLOGY, METADATA_MEDE8ER, metadata_provider_dict, \
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
                 NEWZBIN, NEWZBIN_USERNAME, NEWZBIN_PASSWORD, GIT_PATH, MOVE_ASSOCIATED_FILES, \
                 GUI_NAME, HOME_LAYOUT, DISPLAY_SHOW_SPECIALS, COMING_EPS_LAYOUT, COMING_EPS_SORT, COMING_EPS_DISPLAY_PAUSED, COMING_EPS_MISSED_RANGE, METADATA_WDTV, METADATA_TIVO, IGNORE_WORDS, CREATE_MISSING_SHOW_DIRS, \
                 ADD_SHOWS_WO_DIR, USE_SUBTITLES, SUBTITLES_LANGUAGES, SUBTITLES_DIR, SUBTITLES_SERVICES_LIST, SUBTITLES_SERVICES_ENABLED, subtitlesFinderScheduler
@@ -557,6 +605,13 @@ def initialize(consoleLogging=True):
         BTN = bool(check_setting_int(CFG, 'BTN', 'btn', 0))    
         BTN_API_KEY = check_setting_str(CFG, 'BTN', 'btn_api_key', '')
 
+<<<<<<< HEAD
+        CheckSection(CFG, 'TorrentLeech')
+        TORRENTLEECH = bool(check_setting_int(CFG, 'TorrentLeech', 'torrentleech', 0))
+        TORRENTLEECH_KEY = check_setting_str(CFG, 'TorrentLeech', 'torrentleech_key', '')
+
+        CheckSection(CFG, 'NZBs')
+=======
         DTT = bool(check_setting_int(CFG, 'DTT', 'dtt', 0))
         DTT_NORAR = bool(check_setting_int(CFG, 'DTT', 'dtt_norar', 0))
         DTT_SINGLE = bool(check_setting_int(CFG, 'DTT', 'dtt_single', 0))
@@ -576,6 +631,7 @@ def initialize(consoleLogging=True):
         IPTORRENTS_PASSWORD = check_setting_str(CFG, 'IPTORRENTS', 'iptorrents_password', '')
         IPTORRENTS_FREELEECH = bool(check_setting_int(CFG, 'IPTORRENTS', 'iptorrents_freeleech', 0))
 
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
         NZBS = bool(check_setting_int(CFG, 'NZBs', 'nzbs', 0))
         NZBS_UID = check_setting_str(CFG, 'NZBs', 'nzbs_uid', '')
         NZBS_HASH = check_setting_str(CFG, 'NZBs', 'nzbs_hash', '')
@@ -594,9 +650,22 @@ def initialize(consoleLogging=True):
 
         WOMBLE = bool(check_setting_int(CFG, 'Womble', 'womble', 1))
 
+<<<<<<< HEAD
+        CheckSection(CFG, 'nzbX')
         NZBX = bool(check_setting_int(CFG, 'nzbX', 'nzbx', 0))
         NZBX_COMPLETION = check_setting_int(CFG, 'nzbX', 'nzbx_completion', 100)
 
+        CheckSection(CFG, 'omgwtfnzbs')
+        OMGWTFNZBS = bool(check_setting_int(CFG, 'omgwtfnzbs', 'omgwtfnzbs', 0))
+        OMGWTFNZBS_UID = check_setting_str(CFG, 'omgwtfnzbs', 'omgwtfnzbs_uid', '')
+        OMGWTFNZBS_KEY = check_setting_str(CFG, 'omgwtfnzbs', 'omgwtfnzbs_key', '')
+
+        CheckSection(CFG, 'SABnzbd')
+=======
+        NZBX = bool(check_setting_int(CFG, 'nzbX', 'nzbx', 0))
+        NZBX_COMPLETION = check_setting_int(CFG, 'nzbX', 'nzbx_completion', 100)
+
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
         SAB_USERNAME = check_setting_str(CFG, 'SABnzbd', 'sab_username', '')
         SAB_PASSWORD = check_setting_str(CFG, 'SABnzbd', 'sab_password', '')
         SAB_APIKEY = check_setting_str(CFG, 'SABnzbd', 'sab_apikey', '')
@@ -621,6 +690,7 @@ def initialize(consoleLogging=True):
         XBMC_NOTIFY_ONSUBTITLEDOWNLOAD = bool(check_setting_int(CFG, 'XBMC', 'xbmc_notify_onsubtitledownload', 0))
         XBMC_UPDATE_LIBRARY = bool(check_setting_int(CFG, 'XBMC', 'xbmc_update_library', 0))
         XBMC_UPDATE_FULL = bool(check_setting_int(CFG, 'XBMC', 'xbmc_update_full', 0))
+        XBMC_UPDATE_ONLYFIRST = bool(check_setting_int(CFG, 'XBMC', 'xbmc_update_onlyfirst', 0))
         XBMC_HOST = check_setting_str(CFG, 'XBMC', 'xbmc_host', '')
         XBMC_USERNAME = check_setting_str(CFG, 'XBMC', 'xbmc_username', '')
         XBMC_PASSWORD = check_setting_str(CFG, 'XBMC', 'xbmc_password', '')
@@ -686,6 +756,16 @@ def initialize(consoleLogging=True):
         NMJ_DATABASE = check_setting_str(CFG, 'NMJ', 'nmj_database', '')
         NMJ_MOUNT = check_setting_str(CFG, 'NMJ', 'nmj_mount', '')
 
+<<<<<<< HEAD
+        CheckSection(CFG, 'NMJv2')
+        USE_NMJv2 = bool(check_setting_int(CFG, 'NMJv2', 'use_nmjv2', 0))
+        NMJv2_HOST = check_setting_str(CFG, 'NMJv2', 'nmjv2_host', '')
+        NMJv2_DATABASE = check_setting_str(CFG, 'NMJv2', 'nmjv2_database', '')
+        NMJ_DBLOC = check_setting_str(CFG, 'NMJv2', 'nmjv2_dbloc', '')
+
+        CheckSection(CFG, 'Synology')
+=======
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
         USE_SYNOINDEX = bool(check_setting_int(CFG, 'Synology', 'use_synoindex', 0))
         
         USE_SYNOLOGYNOTIFIER = bool(check_setting_int(CFG, 'SynologyNotifier', 'use_synologynotifier', 0))
@@ -1187,6 +1267,11 @@ def save_config():
     new_config['BTN']['btn'] = int(BTN)
     new_config['BTN']['btn_api_key'] = BTN_API_KEY
 
+<<<<<<< HEAD
+    new_config['TorrentLeech'] = {}
+    new_config['TorrentLeech']['torrentleech'] = int(TORRENTLEECH)
+    new_config['TorrentLeech']['torrentleech_key'] = TORRENTLEECH_KEY
+=======
     new_config['DTT'] = {}
     new_config['DTT']['dtt'] = int(DTT)
     new_config['DTT']['dtt_norar'] = int(DTT_NORAR)
@@ -1209,6 +1294,7 @@ def save_config():
     new_config['IPTORRENTS']['iptorrents_username'] = IPTORRENTS_USERNAME
     new_config['IPTORRENTS']['iptorrents_password'] = IPTORRENTS_PASSWORD
     new_config['IPTORRENTS']['iptorrents_freeleech'] = int(IPTORRENTS_FREELEECH)
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
 
     new_config['NZBs'] = {}
     new_config['NZBs']['nzbs'] = int(NZBS)
@@ -1236,6 +1322,15 @@ def save_config():
     new_config['nzbX'] = {}
     new_config['nzbX']['nzbx'] = int(NZBX)    
     new_config['nzbX']['nzbx_completion'] = int(NZBX_COMPLETION)
+
+    new_config['nzbX'] = {}
+    new_config['nzbX']['nzbx'] = int(NZBX)
+    new_config['nzbX']['nzbx_completion'] = int(NZBX_COMPLETION)
+
+    new_config['omgwtfnzbs'] = {}
+    new_config['omgwtfnzbs']['omgwtfnzbs'] = int(OMGWTFNZBS)
+    new_config['omgwtfnzbs']['omgwtfnzbs_uid'] = OMGWTFNZBS_UID
+    new_config['omgwtfnzbs']['omgwtfnzbs_key'] = OMGWTFNZBS_KEY
 
     new_config['SABnzbd'] = {}
     new_config['SABnzbd']['sab_username'] = SAB_USERNAME
@@ -1265,6 +1360,7 @@ def save_config():
     new_config['XBMC']['xbmc_notify_onsubtitledownload'] = int(XBMC_NOTIFY_ONSUBTITLEDOWNLOAD)
     new_config['XBMC']['xbmc_update_library'] = int(XBMC_UPDATE_LIBRARY)
     new_config['XBMC']['xbmc_update_full'] = int(XBMC_UPDATE_FULL)
+    new_config['XBMC']['xbmc_update_onlyfirst'] = int(XBMC_UPDATE_ONLYFIRST)
     new_config['XBMC']['xbmc_host'] = XBMC_HOST
     new_config['XBMC']['xbmc_username'] = XBMC_USERNAME
     new_config['XBMC']['xbmc_password'] = XBMC_PASSWORD
@@ -1342,11 +1438,19 @@ def save_config():
     new_config['Synology'] = {}
     new_config['Synology']['use_synoindex'] = int(USE_SYNOINDEX)
 
+<<<<<<< HEAD
+    new_config['NMJv2'] = {}
+    new_config['NMJv2']['use_nmjv2'] = int(USE_NMJv2)
+    new_config['NMJv2']['nmjv2_host'] = NMJv2_HOST
+    new_config['NMJv2']['nmjv2_database'] = NMJv2_DATABASE
+    new_config['NMJv2']['nmjv2_dbloc'] = NMJv2_DBLOC
+=======
     new_config['SynologyNotifier'] = {}
     new_config['SynologyNotifier']['use_synologynotifier'] = int(USE_SYNOLOGYNOTIFIER)
     new_config['SynologyNotifier']['synologynotifier_notify_onsnatch'] = int(SYNOLOGYNOTIFIER_NOTIFY_ONSNATCH)
     new_config['SynologyNotifier']['synologynotifier_notify_ondownload'] = int(SYNOLOGYNOTIFIER_NOTIFY_ONDOWNLOAD)
     new_config['SynologyNotifier']['synologynotifier_notify_onsubtitledownload'] = int(SYNOLOGYNOTIFIER_NOTIFY_ONSUBTITLEDOWNLOAD)
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
 
     new_config['Trakt'] = {}
     new_config['Trakt']['use_trakt'] = int(USE_TRAKT)
