@@ -54,15 +54,24 @@ class NzbXProvider(generic.NZBProvider):
         url = self.url + 'nzb?' + str(item['guid']) + '*|*' + urllib.quote_plus(title)
         return (title, url)
 
+<<<<<<< HEAD
+    def _doSearch(self, search, show=None, age=0):
+=======
     def _doSearch(self, search, show=None):
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
         params = {'age': sickbeard.USENET_RETENTION,
                   'completion': sickbeard.NZBX_COMPLETION,
                   'cat': 'tv-hd|tv-sd',
                   'limit': 250,
                   'q': search}
 
+<<<<<<< HEAD
+        if age or not params['age']:
+            params['age'] = age
+=======
         if not params['age']:
             params['age'] = 500
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
 
         if not params['completion']:
             params['completion'] = 100
@@ -74,7 +83,11 @@ class NzbXProvider(generic.NZBProvider):
         try:
             items = json.loads(data)
         except ValueError:
+<<<<<<< HEAD
+            logger.log(u"Error trying to decode nzbX json data", logger.ERROR)
+=======
             logger.log(u"Error trying to decode " + self.provider.name + " RSS feed", logger.ERROR)
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
             return[]
 
         results = []
@@ -82,6 +95,17 @@ class NzbXProvider(generic.NZBProvider):
             if item['name'] and item['guid']:
                 results.append(item)
             else:
+<<<<<<< HEAD
+                logger.log(u"Partial result from nzbx", logger.DEBUG)
+        return results
+
+    def findPropers(self, date=None):
+        results = []
+        for item in self._doSearch('.proper.|.repack.', age=4):
+            if item['postdate']:
+                name, url = self._get_title_and_url(item)
+                results.append(classes.Proper(name, url, datetime.fromtimestamp(item['postdate'])))
+=======
                 logger.log(u"Partial result from " + self.provider.name, logger.DEBUG)
         return results
 
@@ -108,6 +132,7 @@ class NzbXProvider(generic.NZBProvider):
                 results.append(classes.Proper(name, url, datetime.fromtimestamp(item['postdate'])))
             else:
                 logger.log(u"Partial result from " + self.provider.name, logger.DEBUG)
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
         return results
 
 
@@ -117,6 +142,8 @@ class NzbXCache(tvcache.TVCache):
         tvcache.TVCache.__init__(self, provider)
         self.minTime = 20
 
+<<<<<<< HEAD
+=======
     def _getRSSData(self):
         params = {'q': '',
                   'completion': sickbeard.NZBX_COMPLETION,
@@ -130,6 +157,7 @@ class NzbXCache(tvcache.TVCache):
         logger.log(u"nzbX cache update URL: " + url, logger.DEBUG)
         return self.provider.getURL(url)
 
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
     def _parseItem(self, item):
         title, url = self.provider._get_title_and_url(item)
         logger.log(u"Adding item from RSS to cache: " + title, logger.DEBUG)
@@ -139,6 +167,19 @@ class NzbXCache(tvcache.TVCache):
         if not self.shouldUpdate():
             return
 
+<<<<<<< HEAD
+        items = self.provider._doSearch('')
+        if not items:
+            return
+        self.setLastUpdate()
+
+        # now that we've got the latest releases lets delete the old cache
+        logger.log(u"Clearing nzbX cache and updating with new information")
+        self._clearCache()
+
+        for item in items:
+            self._parseItem(item)
+=======
         data = self._getRSSData()
         # as long as the http request worked we count this as an update
         if data:
@@ -161,5 +202,6 @@ class NzbXCache(tvcache.TVCache):
                 self._parseItem(item)
             else:
                 logger.log(u"Partial result from " + self.provider.name, logger.DEBUG)
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
 
 provider = NzbXProvider()
