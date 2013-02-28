@@ -281,15 +281,11 @@ class Overview:
     GOOD = 4
     SKIPPED = SKIPPED # 5
 
-    # For both snatched statuses. Note: SNATCHED/QUAL have same value and break dict.
-    SNATCHED = SNATCHED_PROPER # 9
-
     overviewStrings = {SKIPPED: "skipped",
                        WANTED: "wanted",
                        QUAL: "qual",
                        GOOD: "good",
-                       UNAIRED: "unaired",
-                       SNATCHED: "snatched"}
+                       UNAIRED: "unaired"}
 
 # Get our xml namespaces correct for lxml
 XML_NSMAP = {'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
