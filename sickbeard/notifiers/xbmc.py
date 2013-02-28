@@ -43,7 +43,12 @@ except ImportError:
 
 class XBMCNotifier:
 
+<<<<<<< HEAD
     sickbeard_logo_url = 'https://raw.github.com/mr-orange/Sick-Beard/%s/gui/slick/images/xbmc-notify.png' % (version.SICKBEARD_VERSION)
+=======
+    sb_logo_url = 'https://raw.github.com/midgetspy/Sick-Beard/development/data/images/notifiers/xbmc-notify.png'
+    sb_logo_url = 'http://zoggy.net/rsz_head.png' # TODO: temp placeholder, REMOVE once merged
+>>>>>>> parent of 0b07b48... Change xbmc notification image to be hosted on sickbeard.com
 
     def _get_json_version(self, host, username, password):
         """Returns XBMC JSON-RPC API version (odd # = dev, even # = stable)
