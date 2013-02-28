@@ -30,9 +30,11 @@ from threading import Lock
 
 # apparently py2exe won't build these unless they're imported somewhere
 from sickbeard import providers, metadata
+<<<<<<< HEAD
 from providers import ezrss, tvtorrents, btn, nzbsrus, newznab, womble
 =======
 from providers import ezrss, tvtorrents, btn, nzbsrus, newznab, womble, thepiratebay, dtt, torrentleech, nzbx, iptorrents
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
 from sickbeard.config import CheckSection, check_setting_int, check_setting_str, ConfigMigrator
 
 
