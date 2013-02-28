@@ -275,6 +275,9 @@ class QueueItemAdd(ShowQueueItem):
             if self.show.genre and "talk show" in self.show.genre.lower():
                 self.show.air_by_date = 1
 
+            logger.log(u"Retrieving show info from IMDb", logger.DEBUG)
+            self.show.loadIMDbInfo()
+
         except tvdb_exceptions.tvdb_exception, e:
             logger.log(u"Unable to add show due to an error with TVDB: "+ex(e), logger.ERROR)
             if self.show:
@@ -296,17 +299,12 @@ class QueueItemAdd(ShowQueueItem):
             self._finishEarly()
             raise
 
-        logger.log(u"Retrieving show info from IMDb", logger.DEBUG)
-        try:
-            self.show.loadIMDbInfo()
         except imdb_exceptions.IMDbError, e:
-            #todo Insert UI notification
+#todo Insert UI notification
             logger.log(u" Something wrong on IMDb api: "+ex(e), logger.WARNING)
+
         except imdb_exceptions.IMDbParserError, e:
             logger.log(u" IMDb_api parser error: "+ex(e), logger.WARNING)
-        except Exception, e:
-            logger.log(u"Error loading IMDb info: "+ex(e), logger.ERROR)
-            logger.log(traceback.format_exc(), logger.DEBUG)
 
         # add it to the show list
         sickbeard.showList.append(self.show)
@@ -459,9 +457,6 @@ class QueueItemUpdate(ShowQueueItem):
             logger.log(u" Something wrong on IMDb api: "+ex(e), logger.WARNING)
         except imdb_exceptions.IMDbParserError, e:
             logger.log(u" IMDb api parser error: "+ex(e), logger.WARNING)
-        except Exception, e:
-            logger.log(u"Error loading IMDb info: " + ex(e), logger.ERROR)
-            logger.log(traceback.format_exc(), logger.DEBUG)
         
         try:
             self.show.saveToDB()

@@ -1,5 +1,5 @@
-# Author: seedboy
-# URL: https://github.com/seedboy
+# Author: Idan Gutman
+# URL: http://code.google.com/p/sickbeard/
 #
 # This file is part of Sick Beard.
 #
