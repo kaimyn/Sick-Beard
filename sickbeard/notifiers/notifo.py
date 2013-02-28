@@ -66,11 +66,7 @@ class NotifoNotifier:
             result = json.load(data)
 
         except ValueError, e:
-<<<<<<< HEAD
             logger.log(u"Unable to decode JSON: "+repr(data), logger.ERROR)
-=======
-            logger.log(u"Unable to decode JSON: " + repr(data), logger.ERROR)
->>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
             return False
         
         except IOError, e:
@@ -104,18 +100,7 @@ class NotifoNotifier:
         title: The title of the notification (optional)
         """
         if sickbeard.NOTIFO_NOTIFY_ONDOWNLOAD:
-            self._notifyNotifo(title, ep_name)
-
-    def notify_subtitle_download(self, ep_name, lang, title="Completed:"):
-        """
-        Send a notification that a subtitle was downloaded
-        
-        ep_name: The name of the episode
-        lang: The language of subtitle that was downloaded
-        title: The title of the notification (optional)
-        """
-        if sickbeard.NOTIFO_NOTIFY_ONSUBTITLEDOWNLOAD:
-            self._notifyNotifo(title, ep_name + ": " + lang)
+            self._notifyNotifo(title, ep_name)       
 
     def _notifyNotifo(self, title, message, username=None, apisecret=None, force=False):
         """

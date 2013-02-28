@@ -532,16 +532,11 @@ class GenericMetadata():
             logger.log(u"Unable to look up show on TVDB, not downloading images: "+ex(e), logger.ERROR)
             return None
     
-        if image_type not in ('fanart', 'poster', 'banner', 'poster_thumb', 'banner_thumb'):
+        if image_type not in ('fanart', 'poster', 'banner'):
             logger.log(u"Invalid image type "+str(image_type)+", couldn't find it in the TVDB object", logger.ERROR)
             return None
-
-        if image_type == 'poster_thumb':
-            image_url = re.sub('posters', '_cache/posters', tvdb_show_obj['poster'])
-        elif image_type == 'banner_thumb':
-            image_url = re.sub('graphical', '_cache/graphical', tvdb_show_obj['banner'])
-        else:
-            image_url = tvdb_show_obj[image_type]
+    
+        image_url = tvdb_show_obj[image_type]
     
         image_data = metadata_helpers.getShowImage(image_url, which)
 
@@ -587,7 +582,7 @@ class GenericMetadata():
         # Returns a nested dictionary of season art with the season
         # number as primary key. It's really overkill but gives the option
         # to present to user via ui to pick down the road.
-        for cur_season in range(num_seasons+1):
+        for cur_season in range(num_seasons):
 
             result[cur_season] = {}
             
@@ -597,8 +592,7 @@ class GenericMetadata():
                     result[cur_season][seasonArtID] = seasonsArtObj[seasonArtID]['_bannerpath']
             
             if len(result[cur_season]) == 0:
-#                continue
-                del result[cur_season]
+                continue
 
         return result
 

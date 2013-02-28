@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Sick Beard.  If not, see <http://www.gnu.org/licenses/>.
 
+
+
 import urllib, urllib2
 import datetime
 import traceback
@@ -337,4 +339,3 @@ class TVRage:
             logger.log(u"Unable to create episode from tvrage (could be for a variety of reasons): " + ex(e))
 
         return ep
-
