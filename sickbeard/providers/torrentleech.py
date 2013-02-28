@@ -1,6 +1,14 @@
+<<<<<<< HEAD
+# Author: Robert Massa <robertmassa@gmail.com>
+# URL: http://code.google.com/p/sickbeard/
+#
+# This file is based upon tvtorrents.py.
+#
+=======
 # Author: Idan Gutman
 # URL: http://code.google.com/p/sickbeard/
 #
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
 # This file is part of Sick Beard.
 #
 # Sick Beard is free software: you can redistribute it and/or modify
@@ -16,6 +24,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Sick Beard.  If not, see <http://www.gnu.org/licenses/>.
 
+<<<<<<< HEAD
+import sickbeard
+import generic
+
+from sickbeard import helpers, logger, exceptions, tvcache
+=======
 import re
 
 import sickbeard
@@ -28,10 +42,42 @@ from sickbeard.common import Overview
 from sickbeard.exceptions import ex
 from lib import requests
 from bs4 import BeautifulSoup
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
 
 
 class TorrentLeechProvider(generic.TorrentProvider):
 
+<<<<<<< HEAD
+    def __init__(self):
+        generic.TorrentProvider.__init__(self, "TorrentLeech")
+
+        self.supportsBacklog = False
+        self.cache = TorrentLeechCache(self)
+        self.url = 'http://www.torrentleech.org/'
+
+    def isEnabled(self):
+        return sickbeard.TORRENTLEECH
+
+    def imageName(self):
+        return 'torrentleech.png'
+
+
+class TorrentLeechCache(tvcache.TVCache):
+
+    def __init__(self, provider):
+        tvcache.TVCache.__init__(self, provider)
+
+        # only poll every 15 minutes
+        self.minTime = 15
+
+    def _getRSSData(self):
+
+        if not sickbeard.TORRENTLEECH_KEY:
+            raise exceptions.AuthException("TorrentLeech requires an API key to work correctly")
+
+        url = 'http://rss.torrentleech.org/' + sickbeard.TORRENTLEECH_KEY
+        logger.log(u"TorrentLeech cache update URL: " + url, logger.DEBUG)
+=======
     urls = {'base_url' : 'http://torrentleech.org/',
             'login' : 'http://torrentleech.org/user/account/login/',
             'detail' : 'http://torrentleech.org/torrent/%s',
@@ -235,12 +281,34 @@ class TorrentLeechCache(tvcache.TVCache):
         url = self.provider.urls['search'] % ("", self.provider.categories)
 
         logger.log(u"TorrentLeech cache update URL: "+ url, logger.DEBUG)
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
 
         data = self.provider.getURL(url)
 
         return data
 
     def _parseItem(self, item):
+<<<<<<< HEAD
+        description = helpers.get_xml_text(item.getElementsByTagName('description')[0])
+
+        if "Your RSS key is invalid" in description:
+            raise exceptions.AuthException("TorrentLeech key invalid")
+
+        (title, url) = self.provider._get_title_and_url(item)
+
+        # torrentleech converts dots to spaces, undo this
+        title = title.replace(' ', '.')
+
+        if not title or not url:
+            logger.log(u"The XML returned from the TorrentLeech RSS feed is incomplete, this result is unusable", logger.ERROR)
+            return
+
+        logger.log(u"Adding item from RSS to cache: " + title, logger.DEBUG)
+
+        self._addCacheEntry(title, url)
+
+provider = TorrentLeechProvider()
+=======
 
         (title, url) = item
 
@@ -252,3 +320,4 @@ class TorrentLeechCache(tvcache.TVCache):
         self._addCacheEntry(title, url)
 
 provider = TorrentLeechProvider()
+>>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
