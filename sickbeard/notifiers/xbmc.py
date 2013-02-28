@@ -43,21 +43,13 @@ except ImportError:
 
 class XBMCNotifier:
 
-<<<<<<< HEAD
-    sb_logo_url = 'http://www.sickbeard.com/xbmc-notify.png'
-
-    def _get_xbmc_version(self, host, username, password):
-=======
     sickbeard_logo_url = 'https://raw.github.com/mr-orange/Sick-Beard/%s/gui/slick/images/xbmc-notify.png' % (version.SICKBEARD_VERSION)
 
     def _get_json_version(self, host, username, password):
->>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
         """Returns XBMC JSON-RPC API version (odd # = dev, even # = stable)
 
         Sends a request to the XBMC host using the JSON-RPC to determine if
         the legacy API or if the JSON-RPC API functions should be used.
-
-        Fallback to testing legacy HTTPAPI before assuming it is just a badly configured host.
 
         Args:
             host: XBMC webserver host:port
@@ -91,14 +83,7 @@ class XBMCNotifier:
         if result:
             return result["result"]["version"]
         else:
-            # fallback to legacy HTTPAPI method
-            testCommand = {'command': 'Help'}
-            request = self._send_to_xbmc(testCommand, host, username, password)
-            if request:
-                # return a fake version number, so it uses the legacy method
-                return 1
-            else:
-                return False
+            return False
 
     def _notify_xbmc(self, message, title="Sick Beard", host=None, username=None, password=None, force=False):
         """Internal wrapper for the notify_snatch and notify_download functions
@@ -136,7 +121,7 @@ class XBMCNotifier:
         for curHost in [x.strip() for x in host.split(",")]:
             logger.log(u"Sending XBMC notification to '" + curHost + "' - " + message, logger.MESSAGE)
 
-            xbmcapi = self._get_xbmc_version(curHost, username, password)
+            xbmcapi = self._get_json_version(curHost, username, password)
             if xbmcapi:
                 if (xbmcapi <= 4):
                     logger.log(u"Detected XBMC version <= 11, using XBMC HTTP API", logger.DEBUG)
@@ -146,17 +131,12 @@ class XBMCNotifier:
                         result += curHost + ':' + str(notifyResult)
                 else:
                     logger.log(u"Detected XBMC version >= 12, using XBMC JSON API", logger.DEBUG)
-<<<<<<< HEAD
-                    command = '{"jsonrpc":"2.0","method":"GUI.ShowNotification","params":{"title":"%s","message":"%s", "image": "%s"},"id":1}' % (title.encode("utf-8"), message.encode("utf-8"), self.sb_logo_url)
-=======
                     command = '{"jsonrpc":"2.0","method":"GUI.ShowNotification","params":{"title":"%s","message":"%s","image":"%s"},"id":1}' % (title.encode("utf-8"), message.encode("utf-8"), self.sickbeard_logo_url.encode("utf-8"))
->>>>>>> 9782a00b09f82d447f6f05da18f2bd4624dedcbd
                     notifyResult = self._send_to_xbmc_json(command, curHost, username, password)
                     if notifyResult:
                         result += curHost + ':' + notifyResult["result"].decode(sickbeard.SYS_ENCODING)
             else:
-                logger.log(u"Failed to detect XBMC version for '" + curHost + "', check configuration and try again.", logger.ERROR)
-                result += curHost + ':False'
+                logger.log(u"Failed to detect XBMC version for '" + curHost + "', check configuration and try again.", logger.DEBUG)
 
         return result
 
@@ -280,7 +260,7 @@ class XBMCNotifier:
                 return False
 
             for path in paths:
-                # we do not need it double-encoded, gawd this is dumb
+                # Don't need it double-encoded, gawd this is dumb
                 unEncPath = urllib.unquote(path.text).decode(sickbeard.SYS_ENCODING)
                 logger.log(u"XBMC Updating " + showName + " on " + host + " at " + unEncPath, logger.DEBUG)
                 updateCommand = {'command': 'ExecBuiltIn', 'parameter': 'XBMC.updatelibrary(video, %s)' % (unEncPath)}
@@ -425,7 +405,7 @@ class XBMCNotifier:
                 return False
 
             logger.log(u"XBMC Updating " + showName + " on " + host + " at " + path, logger.DEBUG)
-            updateCommand = '{"jsonrpc":"2.0","method":"VideoLibrary.Scan","params":{"directory":%s},"id":1}' % (json.dumps("\"" + path + "\"")) # yes we really have to wrap the path in escaped "
+            updateCommand = '{"jsonrpc":"2.0","method":"VideoLibrary.Scan","params":{"directory":%s},"id":1}' % (json.dumps(path))
             request = self._send_to_xbmc_json(updateCommand, host)
             if not request:
                 logger.log(u"Update of show directory failed on " + showName + " on " + host + " at " + path, logger.ERROR)
@@ -489,37 +469,32 @@ class XBMCNotifier:
                 logger.log(u"No XBMC hosts specified, check your settings", logger.DEBUG)
                 return False
 
-            if sickbeard.XBMC_UPDATE_ONLYFIRST:
-                # only send update to first host in the list if requested -- workaround for xbmc sql backend users
-                host = sickbeard.XBMC_HOST.split(",")[0].strip()
-            else:
-                host = sickbeard.XBMC_HOST
+            # only send update to first host in the list -- workaround for xbmc sql backend users
+            host = sickbeard.XBMC_HOST.split(",")[0].strip()
 
-            result = 0
-            for curHost in [x.strip() for x in host.split(",")]:
-                logger.log(u"Sending request to update library for XBMC host: '" + curHost + "'", logger.MESSAGE)
+            logger.log(u"Sending request to update library for XBMC host: '" + host + "'", logger.MESSAGE)
 
-                xbmcapi = self._get_xbmc_version(curHost, sickbeard.XBMC_USERNAME, sickbeard.XBMC_PASSWORD)
-                if xbmcapi:
-                    if (xbmcapi <= 4):
-                        # try to update for just the show, if it fails, do full update if enabled
-                        if not self._update_library(curHost, showName) and sickbeard.XBMC_UPDATE_FULL:
-                            logger.log(u"Single show update failed, falling back to full update", logger.WARNING)
-                            self._update_library(curHost)
+            xbmcapi = self._get_json_version(host, sickbeard.XBMC_USERNAME, sickbeard.XBMC_PASSWORD)
+            if xbmcapi:
+                if (xbmcapi <= 4):
+                    # try to update for just the show, if it fails, do full update if enabled
+                    if not self._update_library(host, showName) and sickbeard.XBMC_UPDATE_FULL:
+                        logger.log(u"Single show update failed, falling back to full update", logger.WARNING)
+                        return self._update_library(host)
                     else:
-                        # try to update for just the show, if it fails, do full update if enabled
-                        if not self._update_library_json(curHost, showName) and sickbeard.XBMC_UPDATE_FULL:
-                            logger.log(u"Single show update failed, falling back to full update", logger.WARNING)
-                            self._update_library_json(curHost)
+                        return True
                 else:
-                    logger.log(u"Failed to detect XBMC version for '" + curHost + "', check configuration and try again.", logger.ERROR)
-                    result = result + 1
-
-            # needed for the 'update xbmc' submenu command
-            # as it only cares of the final result vs the individual ones
-            if result == 0:
-                return True
+                    # try to update for just the show, if it fails, do full update if enabled
+                    if not self._update_library_json(host, showName) and sickbeard.XBMC_UPDATE_FULL:
+                        logger.log(u"Single show update failed, falling back to full update", logger.WARNING)
+                        return self._update_library_json(host)
+                    else:
+                        return True
             else:
+                logger.log(u"Failed to detect XBMC version for '" + host + "', check configuration and try again.", logger.DEBUG)
                 return False
+
+            return True
+
 
 notifier = XBMCNotifier

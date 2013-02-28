@@ -1059,11 +1059,9 @@ class TVShow(object):
                 maxBestQuality = None
 
             epStatus, curQuality = Quality.splitCompositeStatus(epStatus)
-    
-            if epStatus in (SNATCHED, SNATCHED_PROPER):
-                return Overview.SNATCHED
+
             # if they don't want re-downloads then we call it good if they have anything
-            elif maxBestQuality == None:
+            if maxBestQuality == None:
                 return Overview.GOOD
             # if they have one but it's not the best they want then mark it as qual
             elif curQuality < maxBestQuality:
